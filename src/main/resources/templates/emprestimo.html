@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Libracontrol - Empréstimos e Devolução</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue-figma: #2D5496;
+            --sidebar-width: 260px;
+            --bg-gray: #F0F2F5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-gray);
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--blue-figma);
+            height: 100vh;
+            color: white;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-logo {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo img {
+            width: 130px;
+        }
+
+        .sidebar nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .sidebar nav a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 15px 25px;
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .sidebar nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .sidebar nav a.active {
+            background-color: #E8F0FE;
+            color: var(--blue-figma);
+            border-radius: 0 25px 25px 0;
+            margin-right: 20px;
+            font-weight: 700;
+        }
+
+        .btn-sair {
+            padding: 20px 25px;
+            color: #FFBABA;
+            text-decoration: none;
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .header-section h2 {
+            color: #333;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 900px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-section-title {
+            font-weight: 700;
+            color: #2D3E50;
+            margin: 30px 0 20px 0;
+            display: block;
+            border-left: 4px solid var(--blue-figma);
+            padding-left: 12px;
+            font-size: 16px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #4A5568;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon input,
+        .input-with-icon textarea {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 1px solid #CBD5E0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+            background: white;
+        }
+
+        .input-with-icon input:focus,
+        .input-with-icon textarea:focus {
+            border-color: var(--blue-figma);
+            box-shadow: 0 0 0 3px rgba(45, 84, 150, 0.1);
+        }
+
+        .input-with-icon .icon-img {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            opacity: 0.4;
+        }
+
+        textarea + .icon-img {
+            top: 25px;
+            transform: none;
+        }
+
+        .date-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .actions-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 14px 35px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-clear {
+            background-color: #E2E8F0;
+            color: #4A5568;
+        }
+
+        .btn-confirm {
+            background-color: #2D3E50;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img th:src="@{/images/LibraControl.png}" alt="LibraControl Logo">
+        </div>
+        <nav>
+            <a th:href="@{/dashboard}">Dashboard</a>
+            <a th:href="@{/acervo}">Acervo</a>
+            <a th:href="@{/atendimento}">Atendimento</a>
+            <a th:href="@{/emprestimo}" class="active">Empréstimos</a>
+            <a th:href="@{/reservas}">Reservas</a>
+        </nav>
+        <a th:href="@{/logout}" class="btn-sair">Sair do Sistema</a>
+    </div>
+
+    <main class="main-content">
+        <div class="header-section">
+            <h2>Registrar Empréstimo</h2>
+        </div>
+
+        <div class="form-card">
+            <form th:action="@{/emprestimo/salvar}" method="post">
+
+                <div class="input-group">
+                    <label>CPF do Leitor</label>
+                    <div class="input-with-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" class="icon-img" alt="Leitor"> 
+                        <input type="text" name="cpfLeitor" placeholder="Ex: 000.000.000-00" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>ID ou Título do Livro</label>
+                    <div class="input-with-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/29/29302.png" class="icon-img" alt="Livro">
+                        <input type="text" name="identificadorLivro" placeholder="Digite o nome ou código do livro" required>
+                    </div>
+                </div>
+
+                <span class="form-section-title">Prazos e Datas</span>
+
+                <div class="date-grid">
+                    <div class="input-group">
+                        <label>Data de Saída</label>
+                        <div class="input-with-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2693/2693507.png" class="icon-img" alt="Calendário">
+                            <input type="date" name="dataSaida" th:value="${#calendars.format(#calendars.createNow(), 'yyyy-MM-dd')}">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Previsão de Devolução</label>
+                        <div class="input-with-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2693/2693507.png" class="icon-img" alt="Calendário">
+                            <input type="date" name="dataDevolucaoPrevisao" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Observações do Estado do Item</label>
+                    <div class="input-with-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png" class="icon-img" alt="Obs">
+                        <textarea name="observacoes" rows="4" placeholder="Descreva danos prévios ou detalhes importantes..."></textarea>
+                    </div>
+                </div>
+
+                <div class="actions-container">
+                    <button type="reset" class="btn btn-clear">Limpar Campos</button>
+                    <button type="submit" class="btn btn-confirm">Confirmar Empréstimo</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+</body>
+</html>

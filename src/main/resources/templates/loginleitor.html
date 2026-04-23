@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libracontrol - Login Leitor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F0F2F5; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-card {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo-container {
+            margin-bottom: 24px;
+        }
+
+        .logo-container img {
+            max-width: 120px;
+        }
+
+        .title-area {
+            color: #2D5496;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 12px;
+            border: 1.5px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background-color: #FAFAFA;
+            transition: border-color 0.3s ease;
+            outline: none; 
+        }
+
+        .input-group input:focus {
+            border-color: #2D5496;
+            background-color: #FFFFFF;
+        }
+
+        .btn-entrar {
+            width: 100%;
+            padding: 14px;
+            background-color: #2D5496; 
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-entrar:hover {
+            background-color: #1e3a6d;
+        }
+
+        .error-message {
+            color: #d93025;
+            background: #f8d7da;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .footer-links {
+            margin-top: 25px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .footer-links a {
+            color: #2D5496;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .admin-link {
+            display: block;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #999 !important;
+            font-weight: 400 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+        <div class="logo-container">
+            <img th:src="@{/images/LibraControl.png}" alt="LibraControl">
+        </div>
+
+        <div class="title-area">Área do Leitor</div>
+
+        <div th:if="${erro != null}" class="error-message">
+            <span th:text="${erro}">Usuário ou senha incorretos</span>
+        </div>
+
+        <form th:action="@{/loginleitor}" method="POST">
+            <div class="input-group">
+                <label for="usuario">CPF ou Registro</label>
+                <input type="text" id="usuario" name="usuario" placeholder="Digite seu registro" required autocomplete="username">
+            </div>
+
+            <div class="input-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="btn-entrar">Acessar Sistema</button>
+        </form>
+
+        <div class="footer-links">
+            <p>Novo por aqui? <a th:href="@{/cadastro-usuario}">Crie sua conta</a></p>
+            <a th:href="@{/loginbibliotecario}" class="admin-link">Acesso Administrativo</a>
+        </div>
+    </div>
+
+</body>
+</html>

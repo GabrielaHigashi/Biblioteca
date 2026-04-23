@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Libracontrol - Reservas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue-figma: #2D5496;
+            --sidebar-width: 260px;
+            --bg-gray: #F0F2F5;
+            --dark-slate: #2D3E50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-gray);
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--blue-figma);
+            height: 100vh;
+            color: white;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-logo {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo img {
+            width: 130px;
+        }
+
+        .sidebar nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .sidebar nav a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 15px 25px;
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .sidebar nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .sidebar nav a.active {
+            background-color: #E8F0FE;
+            color: var(--blue-figma);
+            border-radius: 0 25px 25px 0;
+            margin-right: 20px;
+            font-weight: 700;
+        }
+
+        .btn-sair {
+            padding: 20px 25px;
+            color: #FFBABA;
+            text-decoration: none;
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header-section h2 {
+            color: #333;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .top-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .status-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: #EBF4FF;
+            border: 1px solid #C3DAFE;
+        }
+
+        .status-card p {
+            color: var(--blue-figma);
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .status-card h1 {
+            font-size: 52px;
+            color: var(--blue-figma);
+            font-weight: 800;
+        }
+
+        .form-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: block;
+            color: var(--dark-slate);
+            border-left: 4px solid var(--blue-figma);
+            padding-left: 12px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #CBD5E0;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .input-field:focus {
+            border-color: var(--blue-figma);
+            box-shadow: 0 0 0 3px rgba(45, 84, 150, 0.1);
+        }
+
+        .btn-confirmar {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--dark-slate);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 5px;
+        }
+
+        .btn-confirmar:hover {
+            background-color: #1a252f;
+            transform: translateY(-1px);
+        }
+
+        .table-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px 12px;
+            border-bottom: 2px solid #EDF2F7;
+            color: #718096;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #EDF2F7;
+            font-size: 14px;
+            color: #2D3748;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: #F7FAFC;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: #A0AEC0;
+            padding: 40px !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img th:src="@{/images/LibraControl.png}" alt="LibraControl Logo">
+        </div>
+        <nav>
+            <a th:href="@{/dashboard}">Dashboard</a>
+            <a th:href="@{/acervo}">Acervo</a>
+            <a th:href="@{/atendimento}">Atendimento</a>
+            <a th:href="@{/emprestimo}">Empréstimos</a>
+            <a th:href="@{/reservas}" class="active">Reservas</a>
+        </nav>
+        <a th:href="@{/logout}" class="btn-sair">Sair do Sistema</a>
+    </div>
+
+    <main class="main-content">
+        <div class="header-section">
+            <h2>Gestão de Reservas</h2>
+            <span style="color: #718096; font-weight: 600; font-size: 14px;" 
+                  th:text="${#calendars.format(#calendars.createNow(), 'dd/MM/yyyy')}"></span>
+        </div>
+
+        <div class="top-grid">
+            <div class="card status-card">
+                <p>RESERVAS ATIVAS</p>
+                <h1 th:text="${totalReservas}">0</h1>
+            </div>
+
+            <div class="card">
+                <span class="form-title">Cadastrar Nova Reserva</span>
+                <form th:action="@{/reservas/salvar}" method="POST">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <input type="text" name="codigo" class="input-field" placeholder="Cód. da Reserva (Ex: RES-001)" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="date" name="dataReserva" class="input-field" required>
+                        </div>
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="input-group">
+                            <input type="text" name="tituloLivro" class="input-field" placeholder="Título do Livro" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" name="autor" class="input-field" placeholder="Autor" required>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <input type="text" name="solicitante" class="input-field" placeholder="Nome Completo ou CPF do Solicitante" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-confirmar">Confirmar Reserva na Fila</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <span class="form-title">Fila de Espera Atual</span>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Livro / Obra</th>
+                        <th>Autor</th>
+                        <th>Solicitante</th>
+                        <th>Data da Reserva</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="reserva : ${reservas}">
+                        <td th:text="${reserva.codigo}" style="font-weight: 600; color: #2D5496;">RES-001</td>
+                        <td th:text="${reserva.tituloLivro}">Título do Livro</td>
+                        <td th:text="${reserva.autor}">Nome do Autor</td>
+                        <td th:text="${reserva.solicitante}">Nome do Leitor</td>
+                        <td th:text="${#dates.format(reserva.dataReserva, 'dd/MM/yyyy')}">22/04/2026</td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(reservas)}">
+                        <td colspan="5" class="empty-row">
+                            Nenhuma reserva pendente no sistema no momento.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Libracontrol - Cadastro de Leitor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        .login-card {
+            background-color: #D9D9D9;
+            padding: 30px 40px;
+            border-radius: 8px;
+            width: 420px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .address-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .icon {
+            position: absolute;
+            right: 12px;
+            color: #666;
+        }
+
+        .terms {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .btn-entrar {
+            width: 100%;
+            padding: 12px;
+            background-color: #2D4A85;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-entrar:hover {
+            background-color: #1e335a;
+        }
+
+        .footer-links {
+            margin-top: 15px;
+            font-size: 12px;
+        }
+
+        .footer-links a {
+            color: #2D4A85;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <img th:src="@{/images/LibraControl.png}" alt="Logo Libracontrol" class="logo">
+
+        <form th:action="@{/cadastro-usuario}" method="post">
+            
+            <div class="input-group">
+                <label>Nome Completo</label>
+                <div class="input-container">
+                    <input type="text" name="nome" placeholder="Ex: João Silva" required>
+                    <span class="icon">👤</span>
+                </div>
+            </div>
+
+            <div class="address-row">
+                <div class="input-group" style="flex: 3;">
+                    <label>Endereço</label>
+                    <div class="input-container">
+                        <input type="text" name="endereco" placeholder="Rua, Av..." required>
+                        <span class="icon">📍</span>
+                    </div>
+                </div>
+                <div class="input-group" style="flex: 1;">
+                    <label>Nº</label>
+                    <div class="input-container">
+                        <input type="text" name="numero" placeholder="123" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Telefone</label>
+                <div class="input-container">
+                    <input type="tel" name="telefone" placeholder="(00) 00000-0000" required>
+                    <span class="icon">📞</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>CPF (Será seu login)</label>
+                <div class="input-container">
+                    <input type="text" name="registro" placeholder="000.000.000-00" required>
+                    <span class="icon">💳</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Crie uma Senha</label>
+                <div class="input-container">
+                    <input type="password" name="senha" placeholder="Mínimo 6 caracteres" required>
+                    <span class="icon">🔒</span>
+                </div>
+            </div>
+
+            <div class="terms">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">Li e aceito os Termos de Política de Privacidade</label>
+            </div>
+
+            <button type="submit" class="btn-entrar">Cadastrar e Entrar</button>
+        </form>
+
+        <div class="footer-links">
+            <p>Já tem conta? <a th:href="@{/loginleitor}">Voltar ao Login</a></p>
+        </div>
+    </div>
+
+</body>
+</html>

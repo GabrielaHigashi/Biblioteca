@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Libracontrol - Atendimento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue-figma: #2D5496;
+            --sidebar-width: 260px;
+            --bg-gray: #F0F2F5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-gray);
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--blue-figma);
+            height: 100vh;
+            color: white;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-logo {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo img {
+            width: 130px;
+        }
+
+        .sidebar nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .sidebar nav a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 15px 25px;
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .sidebar nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .sidebar nav a.active {
+            background-color: #E8F0FE;
+            color: var(--blue-figma);
+            border-radius: 0 25px 25px 0;
+            margin-right: 20px;
+            font-weight: 700;
+        }
+
+        .btn-sair {
+            padding: 20px 25px;
+            color: #FFBABA;
+            text-decoration: none;
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .header-section {
+            margin-bottom: 30px;
+        }
+
+        .header-section h2 {
+            color: #333;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .atendimento-card {
+            background-color: #E2E8F0;
+            padding: 40px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: block;
+            color: #1A202C;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #4A5568;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #CBD5E0;
+            border-radius: 8px;
+            background-color: white;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-field:focus {
+            border-color: var(--blue-figma);
+            box-shadow: 0 0 0 3px rgba(45, 84, 150, 0.1);
+        }
+
+        textarea.input-field {
+            resize: none;
+            min-height: 150px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .btn-enviar {
+            background-color: #2D3E50;
+            color: white;
+            padding: 14px 40px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 15px;
+        }
+
+        .btn-enviar:hover {
+            background-color: #1A252F;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img th:src="@{/images/LibraControl.png}" alt="LibraControl Logo">
+        </div>
+        <nav>
+            <a th:href="@{/dashboard}">Dashboard</a>
+            <a th:href="@{/acervo}">Acervo</a>
+            <a th:href="@{/atendimento}" class="active">Atendimento</a>
+            <a th:href="@{/emprestimo}">Empréstimos</a>
+            <a th:href="@{/reservas}">Reservas</a>
+        </nav>
+
+        <a th:href="@{/logout}" class="btn-sair">Sair do Sistema</a>
+    </div>
+
+    <main class="main-content">
+        <div class="header-section">
+            <h2>Atendimento ao Usuário</h2>
+        </div>
+
+        <div class="atendimento-card">
+            <span class="form-title">Nova Solicitação</span>
+
+            <form th:action="@{/atendimento/enviar}" method="POST">
+                <div class="input-group">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" name="nome" class="input-field" placeholder="Digite o nome do usuário"
+                        required>
+                </div>
+
+                <div class="input-group">
+                    <label for="cpf">CPF</label>
+                    <input type="text" id="cpf" name="cpf" class="input-field" placeholder="000.000.000-00" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="tipo">Tipo de Solicitação</label>
+                    <select id="tipo" name="tipo" class="input-field">
+                        <option value="duvida">Dúvidas</option>
+                        <option value="reclamacao">Reclamação</option>
+                        <option value="sugestao">Sugestão</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="observacao">Observação / Descrição</label>
+                    <textarea id="observacao" name="observacao" class="input-field"
+                        placeholder="Descreva detalhadamente a solicitação aqui..."></textarea>
+                </div>
+
+                <div class="btn-container">
+                    <button type="submit" class="btn-enviar">Enviar Solicitação</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+</body>
+
+</html>

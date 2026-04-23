@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Libracontrol - Acervo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue-figma: #2D5496;
+            --sidebar-width: 260px;
+            --bg-gray: #F0F2F5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-gray);
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--blue-figma);
+            height: 100vh;
+            color: white;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .sidebar-logo {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo img {
+            width: 130px;
+        }
+
+        .sidebar nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .sidebar nav a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 15px 25px;
+            display: block;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .sidebar nav a.active {
+            background-color: #E8F0FE;
+            color: var(--blue-figma);
+            border-radius: 0 25px 25px 0;
+            margin-right: 20px;
+            font-weight: 700;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .table-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            border-bottom: 2px solid #EDF2F7;
+            color: #718096;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #EDF2F7;
+            font-size: 14px;
+        }
+
+        .btn-novo {
+            background-color: var(--blue-figma);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-logo"><img th:src="@{/images/LibraControl.png}" alt="Logo"></div>
+        <nav>
+            <a th:href="@{/dashboard}">Dashboard</a>
+            <a th:href="@{/acervo}" class="active">Acervo</a>
+            <a th:href="@{/atendimento}">Atendimento</a>
+            <a th:href="@{/emprestimo}">Empréstimos</a>
+            <a th:href="@{/reservas}">Reservas</a>
+        </nav>
+    </div>
+
+    <main class="main-content">
+        <div class="header-section">
+            <h2>Gestão de Acervo</h2>
+            <a href="#" class="btn-novo">+ Adicionar Livro</a>
+        </div>
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="livro : ${livros}">
+                        <td th:text="${livro.id}">001</td>
+                        <td th:text="${livro.titulo}">Exemplo de Livro</td>
+                        <td th:text="${livro.autor}">Autor Exemplo</td>
+                        <td><span style="color: green;">Disponível</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+
+</html>

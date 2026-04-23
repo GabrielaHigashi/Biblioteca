@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Libracontrol - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue-figma: #2D5496;
+            --sidebar-width: 260px;
+            --bg-gray: #F0F2F5;
+            --dark-slate: #2D3E50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-gray);
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--blue-figma);
+            height: 100vh;
+            color: white;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-logo {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo img {
+            width: 130px;
+        }
+
+        .sidebar nav {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .sidebar nav a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 15px 25px;
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .sidebar nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar nav a.active {
+            background-color: #E8F0FE;
+            color: var(--blue-figma);
+            border-radius: 0 25px 25px 0;
+            margin-right: 20px;
+            font-weight: 700;
+        }
+
+        .btn-sair {
+            padding: 20px 25px;
+            color: #FFBABA;
+            text-decoration: none;
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header-section h2 {
+            color: #333;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            align-items: center;
+        }
+
+        .search-container {
+            flex: 1;
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            padding: 5px 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #ddd;
+        }
+
+        .search-container input {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .btn-pesquisar {
+            background: none;
+            border: none;
+            color: var(--blue-figma);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-cadastrar {
+            background-color: var(--dark-slate);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-cadastrar:hover {
+            background-color: #1a252f;
+        }
+
+        .table-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px 12px;
+            border-bottom: 2px solid #EDF2F7;
+            color: #718096;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #EDF2F7;
+            font-size: 14px;
+            color: #2D3748;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .bg-success { background-color: #C6F6D5; color: #22543D; }
+        .bg-danger { background-color: #FED7D7; color: #822727; }
+
+        .btn-excluir {
+            color: #E53E3E;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-card {
+            background: white;
+            width: 450px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .modal-card h3 {
+            margin-bottom: 25px;
+            color: var(--dark-slate);
+        }
+
+        .modal-input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .modal-input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #4A5568;
+        }
+
+        .modal-input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #CBD5E0;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-salvar-modal {
+            flex: 1;
+            background: var(--blue-figma);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-cancelar-modal {
+            flex: 1;
+            background: #EDF2F7;
+            color: #4A5568;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img th:src="@{/images/LibraControl.png}" alt="Logo">
+        </div>
+        <nav>
+            <a th:href="@{/dashboard}" class="active">Dashboard</a>
+            <a th:href="@{/acervo}">Acervo</a>
+            <a th:href="@{/atendimento}">Atendimento</a>
+            <a th:href="@{/emprestimo}">Empréstimos</a>
+            <a th:href="@{/reservas}">Reservas</a>
+        </nav>
+        <a th:href="@{/logout}" class="btn-sair">Sair do Sistema</a>
+    </div>
+
+    <main class="main-content">
+        <div class="header-section">
+            <h2>Gestão de Acervo</h2>
+            <button onclick="abrirModal()" class="btn-cadastrar">+ Novo Livro</button>
+        </div>
+
+        <div class="top-actions">
+            <form th:action="@{/dashboard}" method="get" class="search-container">
+                <input type="text" name="busca" placeholder="Pesquisar por título ou autor..." th:value="${param.busca}">
+                <button type="submit" class="btn-pesquisar">BUSCAR</button>
+            </form>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Categoria</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="livro : ${livros}">
+                        <td th:text="${livro.id}" style="font-weight: 600;"></td>
+                        <td th:text="${livro.titulo}"></td>
+                        <td th:text="${livro.autor}"></td>
+                        <td th:text="${livro.categoria}"></td>
+                        <td>
+                            <span th:if="${livro.emManutencao}" class="badge bg-danger">Manutenção</span>
+                            <span th:unless="${livro.emManutencao}" class="badge bg-success">Disponível</span>
+                        </td>
+                        <td>
+                            <a th:href="@{/excluir/{id}(id=${livro.id})}" class="btn-excluir">Excluir</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(livros)}">
+                        <td colspan="6" style="text-align: center; padding: 40px; color: #A0AEC0;">
+                            Nenhum livro cadastrado ou encontrado.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div id="modalCadastro" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Cadastrar Novo Livro</h3>
+            <form th:action="@{/livros/salvar}" method="POST">
+                <div class="modal-input-group">
+                    <label>Título do Livro</label>
+                    <input type="text" name="titulo" placeholder="Ex: Dom Casmurro" required>
+                </div>
+                <div class="modal-input-group">
+                    <label>Autor</label>
+                    <input type="text" name="autor" placeholder="Ex: Machado de Assis" required>
+                </div>
+                <div class="modal-input-group">
+                    <label>Categoria</label>
+                    <input type="text" name="categoria" placeholder="Ex: Romance" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-salvar-modal">Salvar Livro</button>
+                    <button type="button" onclick="fecharModal()" class="btn-cancelar-modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function abrirModal() { 
+            document.getElementById("modalCadastro").style.display = "flex"; 
+        }
+        function fecharModal() { 
+            document.getElementById("modalCadastro").style.display = "none"; 
+        }
+    </script>
+</body>
+</html>
