@@ -1,4 +1,4 @@
-# LibraControl 📚
+# LibraControl 
 
 O **LibraControl** é um sistema de gestão bibliotecária desenvolvido como projeto final de curso. A aplicação permite o controle total de um acervo, incluindo o cadastro de livros, gestão de empréstimos, reservas e monitoramento de disponibilidade em tempo real através de um dashboard intuitivo.
 
